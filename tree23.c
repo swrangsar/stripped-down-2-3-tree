@@ -231,23 +231,39 @@ tree23Node* delete(tree23Node* node, int key)
 		}
 		if (key == node->small && !node->large) {
 			/* assuming the parent is not NULL */
-			if (key < node->parent->small) {
-				node->small = node->parent->small;
-				node->parent->small = node->parent->middle->small;
-				if (node23Count(node->parent->middle) == 2) {
-					node->parent->middle->small = node->parent->middle->large;
-					node->parent->middle->large = 0;
-				}
-				if (node23Count(node->parent) == 2) {
-					node->parent->middle->large = node->parent->large;
-					node->parent->large = node->parent->right->small;
-					if (node23Count(node->parent->right) == 2) {
-						node->parent->right->small = node->parent->right->large;
-						node->parent->right->large = 0;
+			if (node23Count(node->parent) == 1) {
+				if (key < node->parent->small) {
+					node->small = node->parent->small;
+					node->parent->small = node->parent->middle->small;
+					if (node23Count(node->parent->middle) == 2) {
+						node->parent->middle->small = node->parent->middle->large;
+						node->parent->middle->large = 0;
+						return node;
 					}
+					node->parent->small = 0;
+					fixNode23(node->parent);
+					return node;
+				} else {
+					node->small = node->parent->small;
+					node->parent->small = 0;
+					if (node23Count(node->parent->left) == 2) {
+						node->parent->small = node->parent->left->large;
+						node->parent->left->large = 0;
+					}
+					fixNode23(node->parent);
+					return node;
 				}
-				return node;
 			}
-			
+
+/*
+					if (node23Count(node->parent) == 2) {
+						node->parent->middle->large = node->parent->large;
+						node->parent->large = node->parent->right->small;
+						if (node23Count(node->parent->right) == 2) {
+							node->parent->right->small = node->parent->right->large;
+							node->parent->right->large = 0;
+						}
+					}
+*/			
 			
 	
