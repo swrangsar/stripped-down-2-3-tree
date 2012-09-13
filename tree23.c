@@ -253,17 +253,34 @@ tree23Node* delete(tree23Node* node, int key)
 					fixNode23(node->parent);
 					return node;
 				}
-			}
-
-/*
-					if (node23Count(node->parent) == 2) {
-						node->parent->middle->large = node->parent->large;
+			} else if (node23count(node->parent) == 2) {
+				if (key < node->parent->small) {
+					if (node23Count(node->parent->middle) == 2) {
+						node->small = node->parent->small;
+						node->parent->small = node->parent->middle->small;
+						node->parent->middle->small = node->parent->middle->large;
+						node->parent->middle->large = 0;
+						return node;
+					} else if (node23Count(node->parent->right) == 2) {
+						node->small = node->parent->small;
+						node->parent->small = node->parent->middle->small;		
+						node->parent->middle->small = node->parent->large;
 						node->parent->large = node->parent->right->small;
-						if (node23Count(node->parent->right) == 2) {
-							node->parent->right->small = node->parent->right->large;
-							node->parent->right->large = 0;
-						}
+						node->parent->right->small = node->parent->right->large;
+						node->parent->right->large = 0;
+						return node;
+					} else {
+						node->small = node->parent->small;
+						node->large = node->parent->middle->small;
+						node->parent->small = node->parent->large;
+						node->parent->middle->small = node->parent->right->small;
+						node->parent->large = 0;
+						free(node->parent->right);
+						return node;
 					}
-*/			
+				}
+
+
+			
 			
 	
