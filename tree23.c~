@@ -386,6 +386,84 @@ tree23* fixNode23(tree23* tree, tree23Node* node)
 			}
 		}
 	}
-				
+	if (node23Count(node->parent) == 2) {
+		if (node == node->parent->left) {
+			if (node23Count(node->parent->middle) == 2) {
+				node->small = node->parent->small;
+				node->middle = node->parent->middle->left;
+				node->parent->small = node->parent->middle->small;
+				node->parent->middle->left = node->parent->middle->middle;
+				node->parent->middle->small = node->parent->middle->large;
+				node->parent->middle->middle = node->parent->middle->right;
+				node->parent->middle->large = 0;
+				node->parent->middle->right = NULL;
+				return tree;
+			}
+			if (node23Count(node->parent->right) == 2) {
+				node->small = node->parent->small;
+				node->middle = node->parent->middle->left;
+				node->parent->small = node->parent->middle->small;
+				node->parent->middle->left = node->parent->middle->middle;
+				node->parent->middle->small = node->parent->large;
+				node->parent->middle->middle = node->parent->right->left;
+				node->parent->large = node->parent->right->small;
+				node->parent->right->left = node->parent->right->middle;
+				node->parent->right->small = node->parent->right->large;
+				node->parent->right->middle = node->parent->right->right;
+				node->parent->right->large = 0;
+				node->parent->right->right = NULL;
+				return tree;
+			} else {
+				node->small = node->parent->small;
+				node->middle = node->parent->middle->left;
+				node->large = node->parent->middle->small;
+				node->right = node->parent->middle->middle;
+				node->parent->small = node->parent->large;
+				node->parent->middle = node->parent->right;
+				node->parent->large = 0;
+				node->parent->right = NULL;
+				return tree;
+			}
+		}
+		if (node == node->parent->middle) {
+			if (node23Count(node->parent->left) == 2) {
+				node->small = node->parent->small;
+				node->middle = node->left;
+				node->left = node->parent->left->right;
+				node->parent->small = node->parent->left->large;
+				node->parent->left->right = NULL;
+				node->parent->left->large = 0;
+				return tree;
+			}
+			if (node23Count(node->parent->right) >= 1) {
+				node->parent->left->large = node->parent->small;
+				node->parent->left->right = node->left;
+				node->parent->small = node->parent->large;
+				node = node->parent->right;
+				node->parent->large = 0;
+				node->parent->right = NULL;
+				return tree;
+			}
+		}
+		if (node == node->parent->right) {
+			if (node23Count(node->parent->middle) == 2) {
+				node->middle = node->left;
+				node->small = node->parent->large;
+				node->left = node->parent->middle->right;
+				node->parent->large = node->parent->middle->large;
+				node->parent->middle->right = NULL;
+				node->parent->middle->large = 0;
+				return tree;
+			} else {
+				node->parent->middle->large = node->parent->large;
+				node->parent->middle->right = node->left;
+				node->parent->large = 0;
+				node->parent->right = NULL;
+				return tree;
+			}
+		}
+	}
+}
+
 		
 	
