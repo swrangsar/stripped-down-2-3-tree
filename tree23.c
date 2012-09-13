@@ -213,7 +213,8 @@ tree23Node* delete(tree23Node* node, int key)
 		tree23Node* match = search(node, key);
 		if (match)) {
 			swapWithRecursive(match, key)
-			return delete(match, key);
+			delete(match, key);
+			return node;
 		} else {
 			return NULL;
 		}
@@ -245,6 +246,8 @@ tree23Node* delete(tree23Node* node, int key)
 						node->parent->right->large = 0;
 					}
 				}
+				return node;
 			}
+			
 			
 	

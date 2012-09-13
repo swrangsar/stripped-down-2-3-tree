@@ -245,5 +245,8 @@ tree23Node* delete(tree23Node* node, int key)
 						node->parent->right->large = 0;
 					}
 				}
+				return node;
+			}
+			
 			
 	
