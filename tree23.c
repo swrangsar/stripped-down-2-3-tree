@@ -41,6 +41,24 @@ tree23Node* position(tree23Node* node, int key)
 	return NULL;
 }
 
+tree23Node* search(tree23Node* node, int key)
+{
+	if (key == node->small || key == node->large) {
+		return node;
+	} else if (isLeaf(node)) {
+		return NULL;
+	}
+	if (!node->large) {
+		if (key < node->small && node->left) position(node->left);
+		if (key > node->small && node->middle) position(node->middle);
+	} else {
+		if (key < node->small && node->left) position(node->left);
+		if (key > node->small && key < node->large && node->middle) position(node->middle);
+		if (key > node->large && node->right) position(node->right);
+	}
+}
+
+
 int* rearrange(int a, int b, int c)
 {
 	int* new = malloc(sizeof(int)*3);
@@ -152,4 +170,57 @@ void tree23Insert(tree23* tree, int key)
 	}
 }
 
+tree23Node* successor(tree23Node* node, int key)
+{
+	if (key != node->small && key != node->large) {
+		return NULL;
+	}
+	if (key == node->small) {
+		return node->middle;
+	}
+	if (key == node->large) {
+		return node->right;
+	}
+}
+
+void swapWithSuccessorRecursive(tree23Node* node, int key)
+{
+	if (successor(node, key)) {
+		tree23Node* temp = successor(node, key);
+		if (key == node->small) {
+			node->small = temp->small;
+			temp->small = key;
+		}
+		if (key == node->large) {
+			node->large = temp->small;
+			temp->small = key;
+		}
+		swapWithSuccessorRecursive(temp, key);
+	}
+}
+					
+
+tree23Node* delete(tree23Node* node, int key)
+{
+	if (!isLeaf(node)) {
+		tree23Node* match = search(node, key);
+		if (match)) {
+			swapWithRecursive(match, key)
+			delete(match, key);
+		} else {
+			return NULL;
+		}
+	} else {
+		/* if the node is  a leaf implement delete for the leaf */
+		if (key == node->large) {
+			node->large = 0;
+			return node;
+		}
+		if (key == node->small && node->large) {
+			node->small = node->large;
+			node->large = 0;
+			return node;
+		}
+		
+		
 	
