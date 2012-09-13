@@ -3,45 +3,45 @@
 #include "queue.h"
 #include "printTree23.h"
 
-typedef struct tree23Node {
+typedef struct node23 {
 	int min;
 	int small;
 	int large;
-	struct tree23Node* left;
-	struct tree23Node* middle;
-	struct tree23Node* right;
-	struct tree23Node* parent;
-} tree23Node;
+	struct node23* left;
+	struct node23* middle;
+	struct node23* right;
+	struct node23* parent;
+} node23;
 
 typedef struct tree23 {
-	tree23Node* root;
+	node23* root;
 } tree23;
 
-int isLeaf(tree23Node* node)
+int isLeaf(node23* node)
 {
-	if (!tree23Node->left && !tree23Node->middle && !tree23Node->right) {
+	if (!node23->left && !node23->middle && !node23->right) {
 		return 1;
 	} else {
 		return 0;
 	}
 }
 
-tree23Node* position(tree23Node* node, int key)
+node23* target23(node23* node, int key)
 {
 	if (isLeaf(node)) return node;
 	if (key == node->small || key == node->large) return NULL;
 	if (!node->large) {
-		if (key < node->small && node->left) position(node->left);
-		if (key > node->small && node->middle) position(node->middle);
+		if (key < node->small && node->left) target23(node->left);
+		if (key > node->small && node->middle) target23(node->middle);
 	} else {
-		if (key < node->small && node->left) position(node->left);
-		if (key > node->small && key < node->large && node->middle) position(node->middle);
-		if (key > node->large && node->right) position(node->right);
+		if (key < node->small && node->left) target23(node->left);
+		if (key > node->small && key < node->large && node->middle) target23(node->middle);
+		if (key > node->large && node->right) target23(node->right);
 	}
 	return NULL;
 }
 
-tree23Node* search(tree23Node* node, int key)
+node23* search23(node23* node, int key)
 {
 	if (key == node->small || key == node->large) {
 		return node;
@@ -49,12 +49,12 @@ tree23Node* search(tree23Node* node, int key)
 		return NULL;
 	}
 	if (!node->large) {
-		if (key < node->small && node->left) position(node->left);
-		if (key > node->small && node->middle) position(node->middle);
+		if (key < node->small && node->left) target23(node->left);
+		if (key > node->small && node->middle) target23(node->middle);
 	} else {
-		if (key < node->small && node->left) position(node->left);
-		if (key > node->small && key < node->large && node->middle) position(node->middle);
-		if (key > node->large && node->right) position(node->right);
+		if (key < node->small && node->left) target23(node->left);
+		if (key > node->small && key < node->large && node->middle) target23(node->middle);
+		if (key > node->large && node->right) target23(node->right);
 	}
 }
 
@@ -75,7 +75,7 @@ int* rearrange(int a, int b, int c)
 	return new;
 }
 
-tree23Node* insert(tree23* tree, tree23Node* node, int key)
+node23* insert(tree23* tree, node23* node, int key)
 {
 	if (isLeaf(node)) {
 		if (!node->small) {
@@ -89,36 +89,36 @@ tree23Node* insert(tree23* tree, tree23Node* node, int key)
 		}
 		return node;
 	} else {
-		tree23Node* tempLeaf = position(node, key);
+		node23* tempLeaf = target23(node, key);
 		if (tempLeaf) insert(tree, tempLeaf, key);
 		return tempLeaf;
 	}
 }
 
-tree23Node* init23Node(tree23Node* node)
+node23* initNode23(node23* node)
 {
 	node->min = node->small = node->large = 0;
 	node->left = node->middle = node->right = node->parent = NULL;
 	return node;
 }
 	
-tree23* pushup(tree23* tree, tree23Node* node, int key)
+tree23* pushup(tree23* tree, node23* node, int key)
 {
 	if (isLeaf(node) || !isLeaf(node)) {
 		/* this part turned out to be the same for both leafs and non-leafs */
 		if (!node->parent) {
-			tree23Node* new = init23Node(malloc(sizeof(tree23Node)));
-			tree23Node* new2 = init23Node(malloc(sizeof(tree23Node)));
+			node23* new = initNode23(malloc(sizeof(node23)));
+			node23* new2 = initNode23(malloc(sizeof(node23)));
 			new->small = node->large; node->large = 0; new->parent = node->parent = new2;
 			new2->small = key; new2->left = node; new2->right = new;
 			tree->root = new2;
 			return tree;
 		} else {
-			tree23Node* new = init23Node(malloc(sizeof(tree23Node)));
+			node23* new = initNode23(malloc(sizeof(node23)));
 			new->small = node->large; node->large = 0;
 			if (node->parent->large) {
 				if (key < node->parent->small) {
-					tree23Node* new2 = init23Node(malloc(sizeof(tree23Node)));
+					node23* new2 = initNode23(malloc(sizeof(node23)));
 					new2->left = node->parent->middle;new2->middle = node->parent->right;
 					new2->small = node->parent->large; node->parent->middle=node->parent->right = NULL;
 					node->parent->middle = new; node->parent->large = 0;
@@ -126,14 +126,14 @@ tree23* pushup(tree23* tree, tree23Node* node, int key)
 					pushup(tree, node->parent, newKey);
 				}
 				if (key > node->parent->small && key < node->parent->large) {
-					tree23Node* new2 = init23Node(malloc(sizeof(tree23Node)));
+					node23* new2 = initNode23(malloc(sizeof(node23)));
 					new2->left = new; new2->middle = node->parent->right;
 					new2->small = node->parent->large; node->parent->right = new;
 					node->parent->large = 0;
 					pushup(tree, node->parent, key);
 				}
 				if (key > node->parent->large) {
-					tree23Node* new2 = init23Node(malloc(sizeof(tree23Node)));
+					node23* new2 = initNode23(malloc(sizeof(node23)));
 					new2->left = node->parent->right; new2->middle = new;
 					new2->small = key; node->parent->right = NULL;
 					int newKey = node->parent->large; node->parent->large  = 0;
@@ -164,13 +164,13 @@ void tree23Insert(tree23* tree, int key)
 	}
 	if (tree->root) insert(tree, tree->root, key);
 	if (!tree->root) {
-		tree23Node* new = init23Node(malloc(sizeof(tree23)));
+		node23* new = initNode23(malloc(sizeof(tree23)));
 		tree->root = new;
 		tree23Insert(tree, key);
 	}
 }
 
-tree23Node* successor(tree23Node* node, int key)
+node23* successor(node23* node, int key)
 {
 	if (key != node->small && key != node->large) {
 		return NULL;
@@ -183,10 +183,10 @@ tree23Node* successor(tree23Node* node, int key)
 	}
 }
 
-void swapWithSuccessorRecursive(tree23Node* node, int key)
+void swapWithSuccessorRecursive(node23* node, int key)
 {
 	if (successor(node, key)) {
-		tree23Node* temp = successor(node, key);
+		node23* temp = successor(node, key);
 		if (key == node->small) {
 			node->small = temp->small;
 			temp->small = key;
@@ -199,7 +199,7 @@ void swapWithSuccessorRecursive(tree23Node* node, int key)
 	}
 }
 
-int node23Count(tree23Node* node)
+int countNode23(node23* node)
 {
 	int n = 0;
 	if (node->small) n++;
@@ -207,10 +207,10 @@ int node23Count(tree23Node* node)
 	return n;
 }					
 
-tree23Node* delete(tree23* tree, tree23Node* node, int key)
+node23* delete(tree23* tree, node23* node, int key)
 {
 	if (!isLeaf(node)) {
-		tree23Node* match = search(node, key);
+		node23* match = search23(node, key);
 		if (match)) {
 			swapWithRecursive(match, key)
 			delete(tree, match, key);
@@ -236,11 +236,11 @@ tree23Node* delete(tree23* tree, tree23Node* node, int key)
 				return NULL;
 			}
 			/* assuming the parent is not NULL */
-			if (node23Count(node->parent) == 1) {
+			if (countNode23(node->parent) == 1) {
 				if (key < node->parent->small) {
 					node->small = node->parent->small;
 					node->parent->small = node->parent->middle->small;
-					if (node23Count(node->parent->middle) == 2) {
+					if (countNode23(node->parent->middle) == 2) {
 						node->parent->middle->small = node->parent->middle->large;
 						node->parent->middle->large = 0;
 						return node;
@@ -253,7 +253,7 @@ tree23Node* delete(tree23* tree, tree23Node* node, int key)
 				} else {
 					node->small = node->parent->small;
 					node->parent->small = 0;
-					if (node23Count(node->parent->left) == 2) {
+					if (countNode23(node->parent->left) == 2) {
 						node->parent->small = node->parent->left->large;
 						node->parent->left->large = 0;
 						return node
@@ -265,13 +265,13 @@ tree23Node* delete(tree23* tree, tree23Node* node, int key)
 				}
 			} else if (node23count(node->parent) == 2) {
 				if (key < node->parent->small) {
-					if (node23Count(node->parent->middle) == 2) {
+					if (countNode23(node->parent->middle) == 2) {
 						node->small = node->parent->small;
 						node->parent->small = node->parent->middle->small;
 						node->parent->middle->small = node->parent->middle->large;
 						node->parent->middle->large = 0;
 						return node;
-					} else if (node23Count(node->parent->right) == 2) {
+					} else if (countNode23(node->parent->right) == 2) {
 						node->small = node->parent->small;
 						node->parent->small = node->parent->middle->small;		
 						node->parent->middle->small = node->parent->large;
@@ -289,12 +289,12 @@ tree23Node* delete(tree23* tree, tree23Node* node, int key)
 						return node;
 					}
 				} else if (key < node->parent->small && key > node->parent->large) {
-					if (node23Count(node->parent->left) == 2) {
+					if (countNode23(node->parent->left) == 2) {
 						node->small = node->parent->small;
 						node->parent->small = node->parent->left->large;
 						node->parent->left->large = 0;
 						return node;
-					} else if (node23Count(node->parent->right) == 2) {
+					} else if (countNode23(node->parent->right) == 2) {
 						node->small = node->parent->large;
 						node->parent->large = node->parent->right->small;
 						node->parent->right->small = node->parent->right->large;
@@ -308,12 +308,12 @@ tree23Node* delete(tree23* tree, tree23Node* node, int key)
 						return node;
 					}
 				} else {
-					if (node23Count(node->parent->middle)==2) {
+					if (countNode23(node->parent->middle)==2) {
 						node->small = node->parent->large;
 						node->parent->large = node->parent->middle->large;
 						node->parent->middle->large = 0;
 						return node;
-					} else if (node23Count(node->parent->left) == 2) {
+					} else if (countNode23(node->parent->left) == 2) {
 						node->small = node->parent->large;
 						node->parent->large = node->parent->middle->small;
 						node->parent->middle->small = node->parent->small;
@@ -333,16 +333,16 @@ tree23Node* delete(tree23* tree, tree23Node* node, int key)
 }
 
 
-tree23* fixNode23(tree23* tree, tree23Node* node)
+tree23* fixNode23(tree23* tree, node23* node)
 {
 	if (!node->parent) {
 		tree->root = node->left; 
 		free(node);
 		return tree;
 	}
-	if (node23Count(node->parent) == 1) {
+	if (countNode23(node->parent) == 1) {
 		if (node == node->parent->left) {
-			if (node23Count(node->parent->middle) == 2) {
+			if (countNode23(node->parent->middle) == 2) {
 				node->small = node->parent->small;
 				node->middle = node->parent->middle->left;
 				node->parent->small = node->parent->middle->small;
@@ -353,7 +353,7 @@ tree23* fixNode23(tree23* tree, tree23Node* node)
 				node->parent->middle->right = NULL;
 				return tree;
 			}
-			if (node23Count(node->parent->middle) == 1) {
+			if (countNode23(node->parent->middle) == 1) {
 				node->parent->middle->right = node->parent->middle->middle;
 				node->parent->middle->large = node->parent->middle->small;
 				node->parent->middle->middle = node->parent->middle->left;
@@ -367,7 +367,7 @@ tree23* fixNode23(tree23* tree, tree23Node* node)
 			}
 		}
 		if (node == node->parent->middle) {
-			if (node23Count(node->parent->left) == 2) {
+			if (countNode23(node->parent->left) == 2) {
 				node->middle = node->left;
 				node->small = node->parent->small;
 				node->left = node->parent->left->right;
@@ -376,7 +376,7 @@ tree23* fixNode23(tree23* tree, tree23Node* node)
 				node->parent->left->large = 0;
 				return tree;
 			}
-			if (node23Count(node->parent->left) == 1) {
+			if (countNode23(node->parent->left) == 1) {
 				node->parent->left->large = node->parent->small;
 				node->parent->left->right = node->left;
 				node->parent->small = 0;
@@ -386,9 +386,9 @@ tree23* fixNode23(tree23* tree, tree23Node* node)
 			}
 		}
 	}
-	if (node23Count(node->parent) == 2) {
+	if (countNode23(node->parent) == 2) {
 		if (node == node->parent->left) {
-			if (node23Count(node->parent->middle) == 2) {
+			if (countNode23(node->parent->middle) == 2) {
 				node->small = node->parent->small;
 				node->middle = node->parent->middle->left;
 				node->parent->small = node->parent->middle->small;
@@ -399,7 +399,7 @@ tree23* fixNode23(tree23* tree, tree23Node* node)
 				node->parent->middle->right = NULL;
 				return tree;
 			}
-			if (node23Count(node->parent->right) == 2) {
+			if (countNode23(node->parent->right) == 2) {
 				node->small = node->parent->small;
 				node->middle = node->parent->middle->left;
 				node->parent->small = node->parent->middle->small;
@@ -426,7 +426,7 @@ tree23* fixNode23(tree23* tree, tree23Node* node)
 			}
 		}
 		if (node == node->parent->middle) {
-			if (node23Count(node->parent->left) == 2) {
+			if (countNode23(node->parent->left) == 2) {
 				node->small = node->parent->small;
 				node->middle = node->left;
 				node->left = node->parent->left->right;
@@ -435,7 +435,7 @@ tree23* fixNode23(tree23* tree, tree23Node* node)
 				node->parent->left->large = 0;
 				return tree;
 			}
-			if (node23Count(node->parent->right) >= 1) {
+			if (countNode23(node->parent->right) >= 1) {
 				node->parent->left->large = node->parent->small;
 				node->parent->left->right = node->left;
 				node->parent->small = node->parent->large;
@@ -446,7 +446,7 @@ tree23* fixNode23(tree23* tree, tree23Node* node)
 			}
 		}
 		if (node == node->parent->right) {
-			if (node23Count(node->parent->middle) == 2) {
+			if (countNode23(node->parent->middle) == 2) {
 				node->middle = node->left;
 				node->small = node->parent->large;
 				node->left = node->parent->middle->right;
