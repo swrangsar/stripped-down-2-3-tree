@@ -138,8 +138,14 @@ tree23* pushup(tree23* tree, tree23Node* node, int key)
 								
 void tree23Insert(tree23* tree, int key)
 {
-			
-			
-		
-
-	
+	if (!tree) {
+		perror("The tree pointer points to NULL!\n");
+		exit(1);
+	}
+	if (tree->root) insert(tree, tree->root, key);
+	if (!tree->root) {
+		tree23Node* new = init23Node(malloc(sizeof(tree23)));
+		tree->root = new;
+		tree23Insert(tree, key);
+	}
+}	

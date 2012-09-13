@@ -151,7 +151,5 @@ void tree23Insert(tree23* tree, int key)
 		tree23Insert(tree, key);
 	}
 }
-			
-		
 
 	
