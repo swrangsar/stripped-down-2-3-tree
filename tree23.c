@@ -198,7 +198,14 @@ void swapWithSuccessorRecursive(tree23Node* node, int key)
 		swapWithSuccessorRecursive(temp, key);
 	}
 }
-					
+
+int node23Count(tree23Node* node)
+{
+	int n = 0;
+	if (node->small) n++;
+	if (node->large) n++;
+	return n;
+}					
 
 tree23Node* delete(tree23Node* node, int key)
 {
@@ -206,7 +213,7 @@ tree23Node* delete(tree23Node* node, int key)
 		tree23Node* match = search(node, key);
 		if (match)) {
 			swapWithRecursive(match, key)
-			delete(match, key);
+			return delete(match, key);
 		} else {
 			return NULL;
 		}
@@ -221,6 +228,21 @@ tree23Node* delete(tree23Node* node, int key)
 			node->large = 0;
 			return node;
 		}
-		
-		
+		if (key == node->small && !node->large) {
+			/* assuming the parent is not NULL */
+			if (key < node->parent->small) {
+`				if (node23Count(node->parent) == 1) {
+					node->small = node->parent->small;
+					node->parent->small = node->parent->middle->small;
+					if (node23Count(node->parent->middle) == 2) {
+						node->parent->middle->small = node->parent->middle->large;
+						node->parent->middle->large = 0;
+					}
+				}
+				if (node->parent->middle->large) {
+					node->parent->middle->small = node->parent->middle->large;
+				} else if (node->parent->large) {
+					node->parent->middle->small = node->parent->large;
+					
+				
 	
