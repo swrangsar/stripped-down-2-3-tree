@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "queue.h"
+#include "printTree23.h"
 
 typedef struct tree23Node {
 	int min;
