@@ -9,6 +9,7 @@ int main(int argc, char* argv[])
 
 	tree23* tree = makeTree23();
 	initialize23(tree, 1, 32);
+	printf("Tree initialized.\n");
 	print23(tree);
 	
 	for (i = 15; i >= 8; i--) {

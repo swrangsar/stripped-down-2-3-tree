@@ -31,7 +31,8 @@ void insert23(tree23* tree, int key);
 node23* successor23(node23* node, int key);
 void swapWithSuccessorRecursive(node23* node, int key);
 int countNode23(node23* node);
-node23* delete23(tree23* tree, node23* node, int key);
+node23* deleteNode23(tree23* tree, node23* node, int key);
+void delete23(tree23* tree, int key);
 tree23* fixNode23(tree23* tree, node23* node);
 void destroy23(node23* node);
 

@@ -7,14 +7,14 @@ queueNode* createQueueNode(void* object)
 	queueNode* new = malloc(sizeof(queueNode));
 	new->next = new->prev = NULL;
 	new->object = object;
-	return queueNode;
+	return new;
 }
 
 queue* createQueue()
 {
 	queue* new = malloc(sizeof(queue));
 	new->head = new->tail = NULL;
-	return queue;
+	return new;
 }
 
 queue* enqueue(queue* self, void* object)
