@@ -97,7 +97,7 @@ int* rearrange(int a, int b, int c)
 	}
 	}
 	#ifdef DEBUG
-		printf("a: %d b: %d c %d\n", new[0], new[1], new[2]);
+//		printf("a: %d b: %d c %d\n", new[0], new[1], new[2]);
 	#endif
 	return new;
 }
@@ -572,14 +572,19 @@ tree23* fixNode23(tree23* tree, node23* node)
 /* cleanup memory after deleting a 2-3 node */
 void destroy23(node23* node)
 {
+	/*
 	printf("deallocating...\n");
 	exit(1);
+	*/
 	if (node) {
+/*
 		if (node->left) free(node->left);
 		if (node->middle) free(node->middle);
 		if (node->right) free(node->right);
 		if (node->parent) free(node->parent);
 		free(node);
+*/
+		node = NULL;
 	}
 }
 

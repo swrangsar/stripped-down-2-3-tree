@@ -17,11 +17,13 @@ int main(int argc, char* argv[])
 	for (i = 15; i >= 8; i--) {
 		delete23(tree, i);
 	}
+	printf("\nNodes deleted...\n\n");
 	print23(tree);
 	
 	for (i = 33; i <= 36; i++) {
 		insert23(tree, i);
 	}
+	printf("\nNodes inserted...\n\n");
 	print23(tree);
 
 
