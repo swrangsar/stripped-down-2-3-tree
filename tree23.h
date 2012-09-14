@@ -23,14 +23,15 @@ node23* search23(node23* node, int key);
 
 /* functions related to inserting into the 2-3 tree */
 int* rearrange(int a, int b, int c);
-node23* insertIntoNode23(tree23* tree, node23* node, int key);
-tree23* pushup(tree23* tree, node23* node, int key)								;
+void insertIntoNode23(tree23* tree, node23* node, int key);
+void splitLeaf23(tree23* tree, node23* node, int key);
+void splitNode23(tree23* tree, node23* node, node23* newChild, int key);
 void insert23(tree23* tree, int key);
 
 /*functions related to deleting */
 node23* successor23(node23* node, int key);
 void swapWithSuccessorRecursive(node23* node, int key);
-int countNode23(node23* node);
+int keyCount23(node23* node);
 node23* deleteNode23(tree23* tree, node23* node, int key);
 void delete23(tree23* tree, int key);
 tree23* fixNode23(tree23* tree, node23* node);
@@ -39,6 +40,6 @@ void destroy23(node23* node);
 /* functions for printing the 2-3 tree */
 void print23(tree23* tree);
 void depthFirstPrint23(node23* node);
-void print23Node(node23* node);
+void printNode23(node23* node);
 
 #endif
