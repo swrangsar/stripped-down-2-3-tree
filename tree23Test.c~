@@ -3,3 +3,16 @@
 #include "tree23.h"
 
 
+tree23* makeTree23()
+{
+	tree23* new = malloc(sizeof(tree23));
+	new->root = NULL;
+	return new;
+}
+
+	
+int main(int argc, char* argv[])
+{
+
+	return 0;
+}
