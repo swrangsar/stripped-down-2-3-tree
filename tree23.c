@@ -19,6 +19,14 @@ node23* makeNode23()
 	return NULL;
 }
 
+void initialize23(tree23* tree, int initial, int last)
+{
+	int i = 0;
+	for (i = initial; i <= last; i++) {
+		insert23(tree, i);
+	}
+}
+
 int isLeaf(node23* node)
 {
 	if (!node23->left && !node23->middle && !node23->right) {
@@ -77,7 +85,7 @@ int* rearrange(int a, int b, int c)
 	return new;
 }
 
-node23* insert23(tree23* tree, node23* node, int key)
+node23* insertIntoNode23(tree23* tree, node23* node, int key)
 {
 	if (isLeaf(node)) {
 		if (!node->small) {
@@ -92,7 +100,7 @@ node23* insert23(tree23* tree, node23* node, int key)
 		return node;
 	} else {
 		node23* tempLeaf = target23(node, key);
-		if (tempLeaf) insert23(tree, tempLeaf, key);
+		if (tempLeaf) insertIntoNode23(tree, tempLeaf, key);
 		return tempLeaf;
 	}
 }
@@ -151,17 +159,17 @@ tree23* pushup(tree23* tree, node23* node, int key)
 	}
 }
 								
-void tree23Insert(tree23* tree, int key)
+void insert23(tree23* tree, int key)
 {
 	if (!tree) {
 		perror("The tree pointer points to NULL!\n");
 		exit(1);
 	}
-	if (tree->root) insert23(tree, tree->root, key);
+	if (tree->root) insertIntoNode23(tree, tree->root, key);
 	if (!tree->root) {
 		node23* new = initNode23(malloc(sizeof(tree23)));
 		tree->root = new;
-		tree23Insert(tree, key);
+		insert23(tree, key);
 	}
 }
 

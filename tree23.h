@@ -14,17 +14,18 @@ typedef struct tree23 {
 	node23* root;
 } tree23;
 
-node23* makeNode23()
-tree23* makeTree23()
+node23* makeNode23();
+tree23* makeTree23();
+void initialize23(tree23* tree, int initial, int last);
 int isLeaf(node23* node);
 node23* target23(node23* node, int key);
 node23* search23(node23* node, int key);
 
 /* functions related to inserting into the 2-3 tree */
 int* rearrange(int a, int b, int c);
-node23* insert23(tree23* tree, node23* node, int key);
+node23* insertIntoNode23(tree23* tree, node23* node, int key);
 tree23* pushup(tree23* tree, node23* node, int key)								;
-void tree23Insert(tree23* tree, int key);
+void insert23(tree23* tree, int key);
 
 /*functions related to deleting */
 node23* successor23(node23* node, int key);
