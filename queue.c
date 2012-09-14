@@ -52,5 +52,5 @@ void* dequeue(queue* self)
 	object = QueueNode->object;
 	free(QueueNode);
 	
-	return QueueNode->object;
+	return object;
 }

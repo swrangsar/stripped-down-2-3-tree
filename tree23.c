@@ -299,6 +299,7 @@ void swapWithSuccessorRecursive(node23* node, int key)
 
 int keyCount23(node23* node)
 {
+	if (!node) return 0;
 	int n = 0;
 	if (node->small) n++;
 	if (node->large) n++;
@@ -439,7 +440,8 @@ void delete23(tree23* tree, int key)
 tree23* fixNode23(tree23* tree, node23* node)
 {
 	if (!node->parent) {
-		tree->root = node->left; 
+		tree->root = node->left;
+		tree->root->parent = NULL; 
 		destroy23(node);
 		return tree;
 	}
@@ -572,18 +574,15 @@ tree23* fixNode23(tree23* tree, node23* node)
 /* cleanup memory after deleting a 2-3 node */
 void destroy23(node23* node)
 {
-	/*
-	printf("deallocating...\n");
-	exit(1);
-	*/
 	if (node) {
-/*
-		if (node->left) free(node->left);
-		if (node->middle) free(node->middle);
-		if (node->right) free(node->right);
-		if (node->parent) free(node->parent);
-		free(node);
-*/
+		if (node->parent) {
+			if (node == node->parent->left) node->parent->left = NULL;
+			if (node == node->parent->middle) node->parent->middle = NULL;
+			if (node == node->parent->right) node->parent->right = NULL;
+		}
+		if (node->left) node->left = NULL;
+		if (node->middle) node->middle = NULL;
+		if (node->right) node->right = NULL;
 		node = NULL;
 	}
 }
