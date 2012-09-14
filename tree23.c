@@ -2,11 +2,16 @@
 #include <stdlib.h>
 #include "queue.h"
 #include "tree23.h"
+#define DEBUG
 
 
 tree23* makeTree23()
 {
 	tree23* new = malloc(sizeof(tree23));
+	if (!new) {
+		perror("Out of memory for 2-3 tree...\n");
+		exit(1);
+	}
 	new->root = NULL;
 	return new;
 }
@@ -14,9 +19,13 @@ tree23* makeTree23()
 node23* makeNode23()
 {
 	node23* new = malloc(sizeof(node23));
+	if (!new) {
+		perror("Out of memory for 2-3 node...\n");
+		exit(1);
+	}
 	new->small = new->large = 0;
 	new->left = new->middle = new->right = new->parent = NULL;
-	return NULL;
+	return new;
 }
 
 void initialize23(tree23* tree, int initial, int last)
@@ -91,9 +100,9 @@ int* rearrange(int a, int b, int c)
 node23* insertIntoNode23(tree23* tree, node23* node, int key)
 {
 	if (isLeaf(node)) {
-		if (!node->small) {
+		if (!countNode23(node)) {
 			node->small = key;
-		} else if (!node->large) {
+		} else if (countNode23(node) == 1) {
 			node->large = key;
 		} else {
 			int* new = rearrange(node->small, node->large, key);
@@ -169,9 +178,14 @@ void insert23(tree23* tree, int key)
 		perror("The tree pointer points to NULL!\n");
 		exit(1);
 	}
+	#ifdef DEBUG
+		//printf("inserting into 2-3 tree...\n");
+		//if (tree->root) printf("tree has root...\n");
+	#endif
 	if (tree->root) insertIntoNode23(tree, tree->root, key);
 	if (!tree->root) {
 		node23* new = makeNode23();
+		if (!new) printf("Out of memory...in insert23()\n");
 		tree->root = new;
 		insert23(tree, key);
 	}
@@ -482,11 +496,14 @@ tree23* fixNode23(tree23* tree, node23* node)
 /* cleanup memory after deleting a 2-3 node */
 void destroy23(node23* node)
 {
+	printf("deallocating...\n");
+	exit(1);
 	if (node) {
 		if (node->left) free(node->left);
 		if (node->middle) free(node->middle);
 		if (node->right) free(node->right);
 		if (node->parent) free(node->parent);
+		free(node);
 	}
 }
 
